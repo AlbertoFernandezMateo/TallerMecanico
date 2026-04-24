@@ -1,7 +1,7 @@
 package org.iesalandalus.programacion.tallermecanico.modelo;
 
 import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Cliente;
-import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Revision;
+import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Trabajo;
 import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Vehiculo;
 import org.iesalandalus.programacion.tallermecanico.modelo.negocio.Clientes;
 import org.iesalandalus.programacion.tallermecanico.modelo.negocio.Revisiones;
@@ -36,10 +36,10 @@ public class Modelo {
         vehiculos.insertar(vehiculo);
     }
 
-    public void insertar(Revision revision) throws TallerMecanicoExcepcion {
+    public void insertar(Trabajo revision) throws TallerMecanicoExcepcion {
         Cliente cliente = clientes.buscar(revision.getCliente());
         Vehiculo vehiculo = vehiculos.buscar(revision.getVehiculo());
-        revisiones.insertar(new Revision(cliente,vehiculo,revision.getFechaInicio()));
+        revisiones.insertar(new Trabajo(cliente,vehiculo,revision.getFechaInicio()));
     }
     public Cliente buscar(Cliente cliente){
         cliente = Objects.requireNonNull(clientes.buscar(cliente), "No existe un cliente igual.");
@@ -50,38 +50,38 @@ public class Modelo {
         vehiculo = Objects.requireNonNull(vehiculos.buscar(vehiculo), "No existe un vehiculo igual.");
         return vehiculo;
     }
-    public Revision buscar(Revision revision){
+    public Trabajo buscar(Trabajo revision){
         revision = Objects.requireNonNull(revisiones.buscar(revision), "No existe una revision igual.");
-        return new Revision(revision);
+        return new Trabajo(revision);
 
     }
     public Cliente modificar(Cliente cliente, String nombre, String telefono) throws TallerMecanicoExcepcion{
         return new Cliente(clientes.modificar(cliente, nombre, telefono));
     }
-    public Revision anadirHoras(Revision revision, int horas) throws TallerMecanicoExcepcion{
-        return new Revision(revisiones.anadirHoras(revision, horas));
+    public Trabajo anadirHoras(Trabajo revision, int horas) throws TallerMecanicoExcepcion{
+        return new Trabajo(revisiones.anadirHoras(revision, horas));
     }
-    public Revision anadirPrecioMaterial(Revision revision, float precioMaterial)throws TallerMecanicoExcepcion{
-        return new Revision(revisiones.anadirPrecioMaterial(revision, precioMaterial));
+    public Trabajo anadirPrecioMaterial(Trabajo revision, float precioMaterial)throws TallerMecanicoExcepcion{
+        return new Trabajo(revisiones.anadirPrecioMaterial(revision, precioMaterial));
     }
-    public Revision cerrar(Revision revision, LocalDate fechaFin) throws TallerMecanicoExcepcion{
-        return new Revision(revisiones.cerrar(revision, fechaFin));
+    public Trabajo cerrar(Trabajo revision, LocalDate fechaFin) throws TallerMecanicoExcepcion{
+        return new Trabajo(revisiones.cerrar(revision, fechaFin));
     }
     public void borrar(Cliente cliente) throws TallerMecanicoExcepcion{
-        List<Revision> revisionesCliente = revisiones.get(cliente);
-        for (Revision revision : revisionesCliente){
+        List<Trabajo> revisionesCliente = revisiones.get(cliente);
+        for (Trabajo revision : revisionesCliente){
             revisiones.borrar(revision);
         }
         clientes.borrar(cliente);
     }
     public void borrar(Vehiculo vehiculo) throws TallerMecanicoExcepcion{
-        List<Revision> revisionesVehiculo = revisiones.get(vehiculo);
-        for (Revision revision : revisionesVehiculo){
+        List<Trabajo> revisionesVehiculo = revisiones.get(vehiculo);
+        for (Trabajo revision : revisionesVehiculo){
             revisiones.borrar(revision);
         }
         vehiculos.borrar(vehiculo);
     }
-    public void borrar(Revision revision) throws TallerMecanicoExcepcion{
+    public void borrar(Trabajo revision) throws TallerMecanicoExcepcion{
         revisiones.borrar(revision);
     }
     public List<Cliente> getClientes(){
@@ -92,24 +92,24 @@ public class Modelo {
         return copiaClientes;
     }
     public List<Vehiculo> getVehiculos() {return vehiculos.get();}
-    public List<Revision> getRevisiones(){
-        List<Revision> copiaRevisiones = new ArrayList<>();
-        for (Revision revision : revisiones.get()){
-            copiaRevisiones.add(new Revision(revision));
+    public List<Trabajo> getRevisiones(){
+        List<Trabajo> copiaRevisiones = new ArrayList<>();
+        for (Trabajo revision : revisiones.get()){
+            copiaRevisiones.add(new Trabajo(revision));
         }
         return copiaRevisiones;
     }
-    public List<Revision> getRevisiones(Cliente cliente) {
-        List<Revision> revisionesCliente = new ArrayList<>();
-        for (Revision revision : revisiones.get(cliente)){
-            revisionesCliente.add(new Revision(revision));
+    public List<Trabajo> getRevisiones(Cliente cliente) {
+        List<Trabajo> revisionesCliente = new ArrayList<>();
+        for (Trabajo revision : revisiones.get(cliente)){
+            revisionesCliente.add(new Trabajo(revision));
         }
         return revisionesCliente;
     }
-    public List<Revision> getRevisiones(Vehiculo vehiculo) {
-        List<Revision> revisionesVehiculo = new ArrayList<>();
-        for (Revision revision : revisiones.get(vehiculo)){
-            revisionesVehiculo.add(new Revision(revision));
+    public List<Trabajo> getRevisiones(Vehiculo vehiculo) {
+        List<Trabajo> revisionesVehiculo = new ArrayList<>();
+        for (Trabajo revision : revisiones.get(vehiculo)){
+            revisionesVehiculo.add(new Trabajo(revision));
         }
         return revisionesVehiculo;
     }
