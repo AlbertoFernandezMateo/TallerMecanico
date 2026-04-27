@@ -49,8 +49,6 @@ public abstract class Trabajo {
 
     public static Trabajo get(Vehiculo vehiculo){
         return new Revision(Cliente.get(String.valueOf(1111111)), vehiculo, LocalDate.of(2000, 12, 23));
-
-
     }
 
 
@@ -96,30 +94,22 @@ public abstract class Trabajo {
         if (horas <= 0){
             throw new IllegalArgumentException("Las horas a añadir deben ser mayores que cero.");
         }
-        if (estaCerrada()){
-            throw new TallerMecanicoExcepcion("No se puede añadir horas, ya que la revisión está cerrada.");
+        if (estaCerrado()){
+            throw new TallerMecanicoExcepcion("No se puede añadir horas, ya que el trabajo está cerrado.");
         }
         this.horas += horas;
     }
 
     public float getPrecioMaterial(){return precioMaterial;}
 
-    public void anadirPrecioMaterial (float precioMaterial)throws TallerMecanicoExcepcion{
-        if (precioMaterial <= 0){
-            throw new IllegalArgumentException("El precio del material a añadir debe ser mayor que cero.");
-        }
-        if (estaCerrada()) {
-            throw new TallerMecanicoExcepcion("No se puede añadir precio del material, ya que la revisión está cerrada.");
-        }
-        this.precioMaterial += precioMaterial;
-    }
 
-    public boolean estaCerrada(){return fechaFin != null;}
+
+    public boolean estaCerrado(){return fechaFin != null;}
 
     public void cerrar(LocalDate fechaFin) throws TallerMecanicoExcepcion{
 
-        if (estaCerrada()) {
-            throw new TallerMecanicoExcepcion("La revisión ya está cerrada.");
+        if (estaCerrado()) {
+            throw new TallerMecanicoExcepcion("El trabajo ya está cerrado.");
         }
         setFechaFin(fechaFin);
 
@@ -155,7 +145,7 @@ public abstract class Trabajo {
     @Override
     public String toString() {
         String cadena;
-        if (!estaCerrada()){
+        if (!estaCerrado()){
             cadena = String.format("%s - %s: (%s - ), %d horas, %.2f € en material",getCliente(),getVehiculo(),getFechaInicio().format(FORMATO_FECHA), getHoras(),getPrecioMaterial());
         } else {
             cadena = String.format("%s - %s: (%s - %s), %d horas, %.2f € en material, %.2f € total", getCliente(),getVehiculo(),getFechaInicio().format(FORMATO_FECHA),getFechaFin().format(FORMATO_FECHA) ,getHoras(),getPrecioMaterial(),getPrecio());

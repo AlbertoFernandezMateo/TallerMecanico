@@ -21,7 +21,7 @@ class TrabajoTest {
     private static LocalDate manana;
     private static LocalDate semanaPasada;
 
-    private Trabajo revision;
+    private Revision revision;
 
     private MockedConstruction<Cliente> controladorCreacionMockCliente;
 
@@ -37,7 +37,7 @@ class TrabajoTest {
     void init() {
         creaComportamientoCliente();
         creaComportamientoVehiculo();
-        revision = new Trabajo(cliente, vehiculo, ayer);
+        revision = new Revision(cliente, vehiculo, ayer);
     }
 
     @AfterEach
@@ -70,31 +70,31 @@ class TrabajoTest {
         assertNull(revision.getFechaFin());
         assertEquals(0, revision.getHoras());
         assertEquals(0, revision.getPrecio());
-        Trabajo revisonSemanaPasada = new Trabajo(cliente, vehiculo, semanaPasada);
+        Revision revisonSemanaPasada = new Revision(cliente, vehiculo, semanaPasada);
         assertEquals(semanaPasada, revisonSemanaPasada.getFechaInicio());
     }
 
     @Test
     void constructorClienteNuloVehiculoValidoFechaInicioValidaLanzaExcepcion() {
-        NullPointerException npe = assertThrows(NullPointerException.class, () -> new Trabajo(null, vehiculo, hoy));
+        NullPointerException npe = assertThrows(NullPointerException.class, () -> new Revision(null, vehiculo, hoy));
         assertEquals("El cliente no puede ser nulo.", npe.getMessage());
     }
 
     @Test
     void constructorClienteValidoVehiculoNuloFechaInicioValidaLanzaExcepcion() {
-        NullPointerException npe = assertThrows(NullPointerException.class, () -> new Trabajo(cliente, null, hoy));
+        NullPointerException npe = assertThrows(NullPointerException.class, () -> new Revision(cliente, null, hoy));
         assertEquals("El vehículo no puede ser nulo.", npe.getMessage());
     }
 
     @Test
     void constructorClienteValidoVehiculoValidoFechaInicioNulaLanzaExcepcion() {
-        NullPointerException npe = assertThrows(NullPointerException.class, () -> new Trabajo(cliente, vehiculo, null));
+        NullPointerException npe = assertThrows(NullPointerException.class, () -> new Revision(cliente, vehiculo, null));
         assertEquals("La fecha de inicio no puede ser nula.", npe.getMessage());
     }
 
     @Test
     void constructorClienteValidoVehiculoValidoFechaInicioNoValidaLanzaExcepcion() {
-        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class, () -> new Trabajo(cliente, vehiculo, manana));
+        IllegalArgumentException iae = assertThrows(IllegalArgumentException.class, () -> new Revision(cliente, vehiculo, manana));
         assertEquals("La fecha de inicio no puede ser futura.", iae.getMessage());
     }
 
@@ -102,7 +102,7 @@ class TrabajoTest {
     void constructorTrabajoValidoCopiaTrabajoCorrectamente() {
         assertDoesNotThrow(() -> revision.anadirHoras(5));
         assertDoesNotThrow(() -> revision.cerrar(hoy));
-        Trabajo copiaRevision = new Trabajo(revision);
+        Revision copiaRevision = new Revision(revision);
         assertNotSame(cliente, copiaRevision.getCliente());
         assertSame(vehiculo, copiaRevision.getVehiculo());
         assertEquals(ayer, copiaRevision.getFechaInicio());
@@ -123,7 +123,7 @@ class TrabajoTest {
 
     @Test
     void constructorTrabajoNuloLanzaExcepcion() {
-        NullPointerException npe = assertThrows(NullPointerException.class, () -> new Trabajo(null));
+        NullPointerException npe = assertThrows(NullPointerException.class, () -> new Revision(null));
         assertEquals("El trabajo no puede ser nulo.", npe.getMessage());
     }
 
@@ -131,7 +131,7 @@ class TrabajoTest {
     void copiarTrabajoValidoCopiaTrabajoCorrectamente() {
         assertDoesNotThrow(() -> revision.anadirHoras(5));
         assertDoesNotThrow(() -> revision.cerrar(hoy));
-        Trabajo copiaRevision = (Trabajo) Trabajo.copiar(revision);
+        Revision copiaRevision = (Revision) Trabajo.copiar(revision);
         assertNotSame(cliente, copiaRevision.getCliente());
         assertSame(vehiculo, copiaRevision.getVehiculo());
         assertEquals(ayer, copiaRevision.getFechaInicio());
@@ -225,7 +225,7 @@ class TrabajoTest {
 
     @Test
     void equalsHashCodeSeBasanSoloEnClienteVehiculoFechaInicio() {
-        Trabajo otraRevision = new Trabajo(cliente, vehiculo, ayer);
+        Revision otraRevision = new Revision(cliente, vehiculo, ayer);
         assertEquals(revision, otraRevision);
         assertEquals(revision.hashCode(), otraRevision.hashCode());
         assertDoesNotThrow(() -> otraRevision.cerrar(hoy));

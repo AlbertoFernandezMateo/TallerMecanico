@@ -44,7 +44,7 @@ public class Revisiones {
     }
     private void comprobarRevision(Cliente cliente, Vehiculo vehiculo, LocalDate fechaRevision)throws TallerMecanicoExcepcion {
         for (Trabajo revision : coleccionRevision) {
-            if (!revision.estaCerrada()) {
+            if (!revision.estaCerrado()) {
                 if (revision.getCliente().equals(cliente)) {
                     throw new TallerMecanicoExcepcion("El cliente tiene otra revisión en curso.");
                 } else if (revision.getVehiculo().equals(vehiculo)) {
