@@ -6,6 +6,7 @@ public class GestorEventos {
     static Map<Evento, List<ReceptorEventos>> receptores = new EnumMap<>(Evento.class);
 
     public void GestorEventos(Evento... eventos){
+        Objects.requireNonNull(eventos, "El evento no puede ser nulo.");
         for (Evento evento : Evento.values()) {
             receptores.put(evento, new ArrayList<>());
         }
