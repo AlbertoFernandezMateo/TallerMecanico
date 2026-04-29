@@ -6,12 +6,13 @@ import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Cliente;
 import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Trabajo;
 import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Vehiculo;
 import org.iesalandalus.programacion.tallermecanico.vista.Vista;
+import org.iesalandalus.programacion.tallermecanico.vista.eventos.Evento;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 
-public class Controlador {
+public class Controlador   {
     private ModeloCascada modeloCascada;
     private Vista vista;
 
@@ -41,8 +42,8 @@ public class Controlador {
         modeloCascada.insertar(vehiculo);
     }
 
-    public void insertarRevision(Trabajo revision) throws TallerMecanicoExcepcion {
-        modeloCascada.insertar(revision);
+    public void insertarRevision(Trabajo trabajo) throws TallerMecanicoExcepcion {
+        modeloCascada.insertar(trabajo);
     }
 
     public Cliente buscarCliente(Cliente cliente){
@@ -53,24 +54,24 @@ public class Controlador {
         return modeloCascada.buscar(vehiculo);
     }
 
-    public Trabajo buscarRevision(Trabajo revision){
-        return modeloCascada.buscar(revision);
+    public Trabajo buscarRevision(Trabajo trabajo){
+        return modeloCascada.buscar(trabajo);
     }
 
     public Cliente modificarCliente(Cliente cliente,String nombre, String telefono) throws TallerMecanicoExcepcion {
         return modeloCascada.modificar(cliente, nombre, telefono);
     }
 
-    public Trabajo anadirHoras(Trabajo revision, int horas) throws TallerMecanicoExcepcion {
-        return modeloCascada.anadirHoras(revision, horas);
+    public Trabajo anadirHoras(Trabajo trabajo, int horas) throws TallerMecanicoExcepcion {
+        return modeloCascada.anadirHoras(trabajo, horas);
     }
 
-    public Trabajo anadirPrecioMaterial(Trabajo revision, float precioMaterial) throws TallerMecanicoExcepcion {
-        return modeloCascada.anadirPrecioMaterial(revision,precioMaterial);
+    public Trabajo anadirPrecioMaterial(Trabajo trabajo, float precioMaterial) throws TallerMecanicoExcepcion {
+        return modeloCascada.anadirPrecioMaterial(trabajo,precioMaterial);
     }
 
-    public Trabajo cerrarRevision(Trabajo revision, LocalDate fechaFin) throws TallerMecanicoExcepcion {
-        return modeloCascada.cerrar(revision,fechaFin);
+    public Trabajo cerrarRevision(Trabajo trabajo, LocalDate fechaFin) throws TallerMecanicoExcepcion {
+        return modeloCascada.cerrar(trabajo,fechaFin);
     }
 
     public void borrarCliente(Cliente cliente) throws TallerMecanicoExcepcion {
@@ -81,8 +82,8 @@ public class Controlador {
         modeloCascada.borrar(vehiculo);
     }
 
-    public void borrarRevision(Trabajo revision) throws TallerMecanicoExcepcion {
-        modeloCascada.borrar(revision);
+    public void borrarRevision(Trabajo trabajo) throws TallerMecanicoExcepcion {
+        modeloCascada.borrar(trabajo);
     }
 
     public List<Cliente> listarClientes(){
@@ -103,5 +104,9 @@ public class Controlador {
 
     public List<Trabajo> listarRevisionesVehiculo(Vehiculo vehiculo){
         return modeloCascada.getRevisiones(vehiculo);
+    }
+
+    public void actualizar(Evento evento){
+
     }
 }
