@@ -2,64 +2,73 @@ package org.iesalandalus.programacion.tallermecanico.modelo.negocio.memoria;
 
 import org.iesalandalus.programacion.tallermecanico.modelo.TallerMecanicoExcepcion;
 import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Cliente;
+import org.iesalandalus.programacion.tallermecanico.modelo.negocio.IClientes;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Clientes implements org.iesalandalus.programacion.tallermecanico.modelo.negocio.IClientes {
+public class Clientes implements IClientes {
 
-    List<Cliente> listaCliente;
+    private List<Cliente> coleccionClientes;
 
-    public Clientes(){
-        listaCliente = new ArrayList<>();
-
+    public Clientes() {
+        coleccionClientes = new ArrayList<>();
     }
+
     @Override
-    public List<Cliente> get(){
-        return listaCliente;
+    public List<Cliente> get() {
+        return coleccionClientes;
     }
+
     @Override
-    public void insertar(Cliente cliente) throws TallerMecanicoExcepcion{
+    public void insertar(Cliente cliente) throws TallerMecanicoExcepcion {
         Objects.requireNonNull(cliente, "No se puede insertar un cliente nulo.");
-        if (listaCliente.contains(cliente)) {
+        if (coleccionClientes.contains(cliente)){
             throw new TallerMecanicoExcepcion("Ya existe un cliente con ese DNI.");
         }
-        listaCliente.add(cliente);
+
+        coleccionClientes.add(cliente);
     }
+
     @Override
-    public Cliente modificar(Cliente cliente, String nombre, String telefono) throws TallerMecanicoExcepcion{
+    public Cliente modificar(Cliente cliente, String nombre, String telefono) throws TallerMecanicoExcepcion {
         Objects.requireNonNull(cliente, "No se puede modificar un cliente nulo.");
+
         Cliente buscado = buscar(cliente);
-        if (!listaCliente.contains(buscado)){
+
+        if (!coleccionClientes.contains(buscado)){
             throw new TallerMecanicoExcepcion("No existe ningún cliente con ese DNI.");
         }
-        if (nombre != null){
+
+        if (nombre != null) {
             buscado.setNombre(nombre);
         }
+
         if (telefono != null){
             buscado.setTelefono(telefono);
         }
+
         return buscado;
     }
 
     @Override
     public Cliente buscar(Cliente cliente){
         Objects.requireNonNull(cliente, "No se puede buscar un cliente nulo.");
-        return (listaCliente.contains(cliente)) ? cliente : null;
+        int indice = coleccionClientes.indexOf(cliente);
+        return (indice != -1 ? coleccionClientes.get(indice) : null);
     }
 
     @Override
-    public void borrar(Cliente cliente) throws TallerMecanicoExcepcion{
+    public void borrar(Cliente cliente) throws TallerMecanicoExcepcion {
         Objects.requireNonNull(cliente, "No se puede borrar un cliente nulo.");
         Cliente buscado = buscar(cliente);
 
-        if (!listaCliente.contains(buscado)){
+        if (!coleccionClientes.contains(buscado)){
             throw new TallerMecanicoExcepcion("No existe ningún cliente con ese DNI.");
         }
-        listaCliente.remove(buscado);
+
+        coleccionClientes.remove(buscado);
 
     }
-
-
-
 }

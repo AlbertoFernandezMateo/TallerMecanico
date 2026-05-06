@@ -2,46 +2,51 @@ package org.iesalandalus.programacion.tallermecanico.modelo.negocio.memoria;
 
 import org.iesalandalus.programacion.tallermecanico.modelo.TallerMecanicoExcepcion;
 import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Vehiculo;
+import org.iesalandalus.programacion.tallermecanico.modelo.negocio.IVehiculos;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class Vehiculos implements org.iesalandalus.programacion.tallermecanico.modelo.negocio.IVehiculos {
-    List<Vehiculo> listaVehiculos;
+public class Vehiculos implements IVehiculos {
 
-    public Vehiculos(){
-        listaVehiculos = new ArrayList<>();
+    private List<Vehiculo> coleccionVehiculos;
+
+    public Vehiculos() {
+        coleccionVehiculos = new ArrayList<>();
     }
+
     @Override
-    public List<Vehiculo> get(){
-        return listaVehiculos;
+    public List<Vehiculo> get() {
+        return coleccionVehiculos;
     }
+
     @Override
     public void insertar(Vehiculo vehiculo) throws TallerMecanicoExcepcion {
         Objects.requireNonNull(vehiculo, "No se puede insertar un vehículo nulo.");
-        if (listaVehiculos.contains(vehiculo)) {
+        if (coleccionVehiculos.contains(vehiculo)){
             throw new TallerMecanicoExcepcion("Ya existe un vehículo con esa matrícula.");
         }
-        listaVehiculos.add(vehiculo);
+
+        coleccionVehiculos.add(vehiculo);
     }
 
     @Override
     public Vehiculo buscar(Vehiculo vehiculo){
         Objects.requireNonNull(vehiculo, "No se puede buscar un vehículo nulo.");
-        return (listaVehiculos.contains(vehiculo)) ? vehiculo : null;
+        int indice = coleccionVehiculos.indexOf(vehiculo);
+        return (indice != -1 ? coleccionVehiculos.get(indice) : null);
     }
 
     @Override
-    public void borrar(Vehiculo vehiculo) throws TallerMecanicoExcepcion{
+    public void borrar(Vehiculo vehiculo) throws TallerMecanicoExcepcion {
         Objects.requireNonNull(vehiculo, "No se puede borrar un vehículo nulo.");
         Vehiculo buscado = buscar(vehiculo);
 
-        if (!listaVehiculos.contains(buscado)){
+        if (!coleccionVehiculos.contains(buscado)){
             throw new TallerMecanicoExcepcion("No existe ningún vehículo con esa matrícula.");
         }
-        listaVehiculos.remove(buscado);
 
+        coleccionVehiculos.remove(buscado);
     }
-
 }

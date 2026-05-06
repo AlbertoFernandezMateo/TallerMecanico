@@ -1,5 +1,8 @@
 package org.iesalandalus.programacion.tallermecanico.vista.texto;
 
+import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Cliente;
+import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Trabajo;
+import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Vehiculo;
 import org.iesalandalus.programacion.tallermecanico.vista.eventos.Evento;
 import org.iesalandalus.programacion.utilidades.Entrada;
 
@@ -65,7 +68,7 @@ public class Consola {
         do {
             System.out.print("¿Que opción quieres elegir?: ");
             opcion = Entrada.entero();
-        } while (!Evento.esValido(opcion));
+        } while (!Evento.esValida(opcion));
         return Evento.get(opcion);
     }
 

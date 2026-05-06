@@ -1,112 +1,61 @@
 package org.iesalandalus.programacion.tallermecanico.controlador;
 
-import org.iesalandalus.programacion.tallermecanico.modelo.cascada.ModeloCascada;
-import org.iesalandalus.programacion.tallermecanico.modelo.TallerMecanicoExcepcion;
-import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Cliente;
-import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Trabajo;
-import org.iesalandalus.programacion.tallermecanico.modelo.dominio.Vehiculo;
+import org.iesalandalus.programacion.tallermecanico.modelo.Modelo;
 import org.iesalandalus.programacion.tallermecanico.vista.Vista;
 import org.iesalandalus.programacion.tallermecanico.vista.eventos.Evento;
+import org.iesalandalus.programacion.tallermecanico.vista.eventos.ReceptorEventos;
 
-import java.time.LocalDate;
-import java.util.List;
 import java.util.Objects;
 
-public class Controlador   {
-    private ModeloCascada modeloCascada;
+public class Controlador implements IControlador {
+    private Modelo modelo;
     private Vista vista;
 
-    public Controlador(ModeloCascada modeloCascada, Vista vista) {
+    public Controlador(Modelo modelo, Vista vista) {
         Objects.requireNonNull(vista,"La vista no puede ser nula");
-        Objects.requireNonNull(modeloCascada,"El modelo no puede ser nulo");
-        vista.setControlador(this);
-        this.modeloCascada = modeloCascada;
+        Objects.requireNonNull(modelo,"El modelo no puede ser nulo");
+        vista.getGestorEventos().suscribir((ReceptorEventos) this,Evento.values());
+        this.modelo = modelo;
         this.vista = vista;
     }
 
     public void comenzar(){
-        modeloCascada.comenzar();
+        modelo.comenzar();
         vista.comenzar();
     }
 
     public void terminar(){
-        modeloCascada.terminar();
+        modelo.terminar();
         vista.terminar();
     }
 
-    public void insertarCliente(Cliente cliente) throws TallerMecanicoExcepcion {
-        modeloCascada.insertar(cliente);
-    }
-
-    public void insertarVehiculo(Vehiculo vehiculo) throws TallerMecanicoExcepcion {
-        modeloCascada.insertar(vehiculo);
-    }
-
-    public void insertarRevision(Trabajo trabajo) throws TallerMecanicoExcepcion {
-        modeloCascada.insertar(trabajo);
-    }
-
-    public Cliente buscarCliente(Cliente cliente){
-        return modeloCascada.buscar(cliente);
-    }
-
-    public Vehiculo buscarVehiculo(Vehiculo vehiculo){
-        return modeloCascada.buscar(vehiculo);
-    }
-
-    public Trabajo buscarRevision(Trabajo trabajo){
-        return modeloCascada.buscar(trabajo);
-    }
-
-    public Cliente modificarCliente(Cliente cliente,String nombre, String telefono) throws TallerMecanicoExcepcion {
-        return modeloCascada.modificar(cliente, nombre, telefono);
-    }
-
-    public Trabajo anadirHoras(Trabajo trabajo, int horas) throws TallerMecanicoExcepcion {
-        return modeloCascada.anadirHoras(trabajo, horas);
-    }
-
-    public Trabajo anadirPrecioMaterial(Trabajo trabajo, float precioMaterial) throws TallerMecanicoExcepcion {
-        return modeloCascada.anadirPrecioMaterial(trabajo,precioMaterial);
-    }
-
-    public Trabajo cerrarRevision(Trabajo trabajo, LocalDate fechaFin) throws TallerMecanicoExcepcion {
-        return modeloCascada.cerrar(trabajo,fechaFin);
-    }
-
-    public void borrarCliente(Cliente cliente) throws TallerMecanicoExcepcion {
-        modeloCascada.borrar(cliente);
-    }
-
-    public void borrarVehiculo(Vehiculo vehiculo) throws TallerMecanicoExcepcion {
-        modeloCascada.borrar(vehiculo);
-    }
-
-    public void borrarRevision(Trabajo trabajo) throws TallerMecanicoExcepcion {
-        modeloCascada.borrar(trabajo);
-    }
-
-    public List<Cliente> listarClientes(){
-        return modeloCascada.getClientes();
-    }
-
-    public List<Vehiculo> listarVehiculos(){
-        return modeloCascada.getVehiculos();
-    }
-
-    public List<Trabajo> listarRevisiones(){
-        return modeloCascada.getRevisiones();
-    }
-
-    public List<Trabajo> listarRevisionesCliente(Cliente cliente){
-        return modeloCascada.getRevisiones(cliente);
-    }
-
-    public List<Trabajo> listarRevisionesVehiculo(Vehiculo vehiculo){
-        return modeloCascada.getRevisiones(vehiculo);
-    }
-
-    public void actualizar(Evento evento){
-
+    @Override
+    public void actualizar(Evento evento) {
+        try {
+            switch (evento){
+                case INSERTAR_CLIENTE -> { modelo.insertar(vista.leerCliente()); vista.notificarResultado(Evento.INSERTAR_CLIENTE, "Cliente insertado correctamente",true);}
+                case INSERTAR_VEHICULO -> { modelo.insertar(vista.leerVehiculo()); vista.notificarResultado(Evento.INSERTAR_VEHICULO, "Vehiculo insertado correctamente",true);}
+                case INSERTAR_REVISION -> { modelo.insertar(vista.leerRevision()); vista.notificarResultado(Evento.INSERTAR_REVISION, "Revisión insertada correctamente",true);}
+                case INSERTAR_MECANICO -> { modelo.insertar(vista.leerMecanico()); vista.notificarResultado(Evento.INSERTAR_MECANICO, "Mecánico insertado correctamente",true);}
+                case BUSCAR_CLIENTE -> { modelo.buscar(vista.leerCliente()); vista.notificarResultado(Evento.BUSCAR_CLIENTE, "Cliente buscado correctamente",true);}
+                case BUSCAR_VEHICULO -> { modelo.buscar(vista.leerVehiculo()); vista.notificarResultado(Evento.BUSCAR_VEHICULO, "Vehiculo buscado correctamente",true);}
+                case BUSCAR_TRABAJO -> { modelo.buscar(vista.leerTrabajoVehiculo()); vista.notificarResultado(Evento.BUSCAR_TRABAJO, "Trabajo buscado correctamente",true);}
+                case MODIFICAR_CLIENTE -> { modelo.modificar(vista.leerCliente(),vista.leerNuevoNombre(), vista.leerNuevoTelefono()); vista.notificarResultado(Evento.MODIFICAR_CLIENTE, "Cliente modificado correctamente",true);}
+                case ANADIR_HORAS_TRABAJO -> { modelo.anadirHoras(vista.leerTrabajoVehiculo(),vista.leerHoras()); vista.notificarResultado(Evento.ANADIR_HORAS_TRABAJO, "Horas añadidas correctamente",true);}
+                case ANADIR_PRECIO_MATERIAL_TRABAJO -> { modelo.anadirPrecioMaterial(vista.leerTrabajoVehiculo(),vista.leerPrecioMaterial()); vista.notificarResultado(Evento.ANADIR_PRECIO_MATERIAL_TRABAJO, "Precio añadido correctamente",true);}
+                case CERRAR_TRABAJO -> { modelo.cerrar(vista.leerTrabajoVehiculo(),vista.leerFechaCierre()); vista.notificarResultado(Evento.CERRAR_TRABAJO, "Trabajo cerrado correctamente",true);}
+                case BORRAR_CLIENTE -> { modelo.borrar(vista.leerCliente()); vista.notificarResultado(Evento.BORRAR_CLIENTE, "Cliente borrado correctamente",true);}
+                case BORRAR_VEHICULO -> { modelo.borrar(vista.leerVehiculo()); vista.notificarResultado(Evento.BORRAR_VEHICULO, "Vehiculo borrado correctamente",true);}
+                case BORRAR_TRABAJO -> { modelo.borrar(vista.leerTrabajoVehiculo()); vista.notificarResultado(Evento.BORRAR_TRABAJO, "Trabajo borrado correctamente",true);}
+                case LISTAR_CLIENTE -> { modelo.getClientes(); vista.notificarResultado(Evento.LISTAR_CLIENTE, "Clientes listados correctamente",true);}
+                case LISTAR_VEHICULO -> { modelo.getVehiculos(); vista.notificarResultado(Evento.LISTAR_VEHICULO, "Vehículos listados correctamente",true);}
+                case LISTAR_TRABAJO -> { modelo.getTrabajos(); vista.notificarResultado(Evento.LISTAR_TRABAJO, "Trabajos listados correctamente",true);}
+                case LISTAR_TRABAJO_CLIENTE -> { modelo.getTrabajos(vista.leerCliente()); vista.notificarResultado(Evento.LISTAR_TRABAJO_CLIENTE, "Trabajos de un cliente listados correctamente",true);}
+                case LISTAR_TRABAJO_VEHICULO -> { modelo.getTrabajos(vista.leerVehiculo()); vista.notificarResultado(Evento.LISTAR_TRABAJO_VEHICULO, "Trabajos de un vehiculo listados correctamente",true);}
+                case SALIR -> {}
+            }
+        } catch (Exception e){
+            vista.notificarResultado(evento, e.getMessage(), false);
+        }
     }
 }
