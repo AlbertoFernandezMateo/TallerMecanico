@@ -24,7 +24,8 @@ public enum Evento {
     LISTAR_TRABAJO_VEHICULO (37,"Listar revisión vehiculo"),
     ANADIR_HORAS_TRABAJO (38, "Añadir horas a la revisión"),
     ANADIR_PRECIO_MATERIAL_TRABAJO (39,"Añadir precio material de revisión"),
-    CERRAR_TRABAJO (40,"Cerrar revisión"),
+    MOSTRAR_ESTADISTICAS_MENSUALES(40, "Mostrar estadísticas mensuales"),
+    CERRAR_TRABAJO (41,"Cerrar revisión"),
     SALIR (1,"Salir");
 
     private int numeroOpcion;

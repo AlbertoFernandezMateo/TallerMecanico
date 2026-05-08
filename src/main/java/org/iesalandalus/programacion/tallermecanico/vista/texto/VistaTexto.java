@@ -8,6 +8,7 @@ import org.iesalandalus.programacion.tallermecanico.vista.eventos.GestorEventos;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class VistaTexto implements Vista {
     private GestorEventos gestorEventos = new GestorEventos(Evento.values());
@@ -179,4 +180,15 @@ public class VistaTexto implements Vista {
             }
         }
     }
+
+    public LocalDate leerMes(){
+        return Consola.leerFecha("¿Dime el  mes quieres elegir?");
+    }
+
+
+    public void mostrarEstadisticasMensuales(Map<TipoTrabajo,Integer> estadisticas){
+        Consola.mostrarCabecera("Estas son las estadísticas del mes");
+        System.out.println(estadisticas);
+    }
+
 }

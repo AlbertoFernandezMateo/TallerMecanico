@@ -17,7 +17,5 @@ public class FuenteDatosMemoria implements IFuenteDatos {
     }
 
     @Override
-    public ITrabajos crearTrabajos(){
-        return new Trabajos();
-    }
+    public ITrabajos crearTrabajos(){ return new Trabajos();}
 }
