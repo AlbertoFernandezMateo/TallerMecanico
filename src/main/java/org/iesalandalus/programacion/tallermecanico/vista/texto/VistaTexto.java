@@ -6,9 +6,7 @@ import org.iesalandalus.programacion.tallermecanico.vista.eventos.Evento;
 import org.iesalandalus.programacion.tallermecanico.vista.eventos.GestorEventos;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class VistaTexto implements Vista {
     private GestorEventos gestorEventos = new GestorEventos(Evento.values());
@@ -19,17 +17,17 @@ public class VistaTexto implements Vista {
     }
 
     @Override
-    public void comenzar(){
+    public void comenzar() {
         Evento evento;
-        do{
+        do {
             Consola.mostrarMenu();
             evento = Consola.elegirOpcion();
             ejecutar(evento);
-        } while(evento != Evento.SALIR);
+        } while (evento != Evento.SALIR);
     }
 
     @Override
-    public void terminar(){
+    public void terminar() {
         System.out.println("Chao!");
     }
 
@@ -43,8 +41,8 @@ public class VistaTexto implements Vista {
     }
 
     @Override
-    public void notificarResultado(Evento evento, String texto, Boolean exito){
-        if (exito){
+    public void notificarResultado(Evento evento, String texto, Boolean exito) {
+        if (exito) {
             System.out.println(texto);
         } else {
             System.out.printf("ERROR: %s", texto);
@@ -116,70 +114,66 @@ public class VistaTexto implements Vista {
     }
 
     @Override
-    public void mostrarCliente(Cliente cliente){
+    public void mostrarCliente(Cliente cliente) {
         Consola.mostrarCabecera("Cliente elegido");
 
     }
 
     @Override
-    public void mostrarVehiculo(Vehiculo vehiculo){
+    public void mostrarVehiculo(Vehiculo vehiculo) {
         Consola.mostrarCabecera("Vehiculo elegido");
 
     }
 
     @Override
-    public void mostrarTrabajo(Trabajo trabajo){
+    public void mostrarTrabajo(Trabajo trabajo) {
         Consola.mostrarCabecera("Trabajo elegido");
 
     }
 
+
     @Override
-    public void mostrarClientes(Cliente[] clientes){
+    public void mostrarClientes(List<Cliente> clientes) {
         Consola.mostrarCabecera("Lista de clientes");
-        List<Cliente> listaClientes = new ArrayList<>();
-        for (Cliente cliente : clientes){
-            listaClientes.add(cliente);
-        }
-        if (listaClientes.isEmpty()){
+        clientes.sort(Comparator.comparing(Cliente::getNombre).thenComparing(Cliente::getDni));
+        if (clientes.isEmpty()) {
             System.out.println("No hay clientes todavía.");
         } else {
-            for(Cliente cliente : clientes){
-                System.out.println(cliente);
+            for (Cliente cliente : clientes) {
+                System.out.println(clientes);
             }
         }
     }
 
     @Override
-    public void mostrarVehiculos(Vehiculo[] vehiculos){
+    public void mostrarVehiculos(List<Vehiculo> vehiculos) {
         Consola.mostrarCabecera("Lista de vehículos");
-        List<Vehiculo> listaVehiculos = new ArrayList<>();
-        for (Vehiculo vehiculo : vehiculos){
-            listaVehiculos.add(vehiculo);
-        }
-        if (listaVehiculos.isEmpty()){
-            System.out.println("No hay vehículos todavía.");
+        vehiculos.sort(Comparator.comparing(Vehiculo::marca).thenComparing(Vehiculo::matricula));
+        if (vehiculos.isEmpty()) {
+            System.out.println("No hay vehiculos todavía.");
         } else {
-            for(Vehiculo vehiculo : listaVehiculos){
-                System.out.println(vehiculo);
+            for (Vehiculo vehiculo : vehiculos) {
+                System.out.println(vehiculos);
             }
         }
     }
 
+
     @Override
-    public void mostrarTrabajos(Trabajo[] trabajos){
-        Consola.mostrarCabecera("Lista de revisiones");
-        List<Trabajo> listaTrabajos = new ArrayList<>();
-        for (Trabajo trabajo : trabajos){
-            listaTrabajos.add(trabajo);
-        }
-        if (listaTrabajos.isEmpty()){
-            System.out.println("No hay revisiones todavía.");
+    public void mostrarTrabajos(List<Trabajo> trabajos){
+        Consola.mostrarCabecera("Lista de trabajos");
+        Comparator<Cliente> comparadorCliente = Comparator.comparing(Cliente::getNombre).thenComparing(Cliente::getDni);
+        trabajos.sort(Comparator.comparing(Trabajo::getFechaInicio).thenComparing(Trabajo::getCliente,comparadorCliente));
+        if (trabajos.isEmpty()){
+            System.out.println("No hay trabajos todavía.");
         } else {
-            for(Trabajo trabajo : listaTrabajos){
+            for(Trabajo trabajo : trabajos){
                 System.out.println(trabajo);
             }
         }
     }
+
+
 
     public LocalDate leerMes(){
         return Consola.leerFecha("¿Dime el  mes quieres elegir?");
